@@ -29,9 +29,8 @@ export const subscribeToEvents = (game: Game): void => {
     "playerSendsCommand",
     ({ playerSendsCommand }, context) => {
       const parser = playerSendsCommand.command.split(" ");
-      if (parser.length > 1) {
-        commandList[parser[0]].fx(game, parser, playerSendsCommand, context);
-      }
+
+      commandList[parser[0]].fx({ game, parser, playerSendsCommand, context });
     }
   );
 

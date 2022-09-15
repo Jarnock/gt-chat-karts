@@ -1,6 +1,6 @@
 import * as connection from "./functions/connection";
 import { subscribeToEvents } from "./functions/subscriptions";
-import { danceParty } from "./functions/other";
+import { danceParty, gokartCleanup } from "./functions/other";
 import { commandList } from "./config/commands";
 global.WebSocket = require("isomorphic-ws");
 
@@ -16,7 +16,8 @@ const run = async (): Promise<void> => {
     subscribeToEvents(games[id]);
 
     //Example extension, not rated for >30 guests.
-    danceParty(games[id]);
+    //danceParty(games[id]);
+    gokartCleanup(games[id]);
   }
 };
 

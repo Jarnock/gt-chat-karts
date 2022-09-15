@@ -1,7 +1,9 @@
-import { API_KEY } from "../config/config";
+//import { API_KEY } from "../config/config"; //Only use if you are not using .env
 import axios from "axios";
 import { GameMapV2, Space } from "@gathertown/gather-game-client";
 //These endpoints taken from the documentation @
+
+const API_KEY = process.env.API_KEY;
 
 export const createSpace = async (
   spaceName: string,

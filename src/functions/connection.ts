@@ -1,5 +1,7 @@
 import { Game, SpaceMemberInfo } from "@gathertown/gather-game-client";
-import { API_KEY, SPACE_URLS } from "../config/config";
+import { /*API_KEY,*/ SPACE_URLS } from "../config/config"; //Uncomment API_KEY if you cannot use .env
+
+const API_KEY = process.env.API_KEY;
 
 interface GameArray {
   [key: string]: Game;
@@ -19,7 +21,7 @@ export const connectToSpaces = (commands?: string[]): Promise<GameArray> => {
         const parser = url.split("?")[0].split("/");
         const cleanName = decodeURI(parser[5]);
         const game = new Game([parser[4], cleanName].join("\\"), () =>
-          Promise.resolve({ apiKey: API_KEY })
+          Promise.resolve({ apiKey: API_KEY! })
         );
 
         if (commands) {
