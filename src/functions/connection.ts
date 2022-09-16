@@ -1,6 +1,6 @@
 import { Game, SpaceMemberInfo } from "@gathertown/gather-game-client";
 import { /*API_KEY,*/ SPACE_URLS } from "../config/config"; //Uncomment API_KEY if you cannot use .env
-
+require("dotenv").config();
 const API_KEY = process.env.API_KEY;
 
 interface GameArray {
@@ -16,6 +16,7 @@ export var spaceRoles: MembersArray = {};
 export const connectToSpaces = (commands?: string[]): Promise<GameArray> => {
   return new Promise(async (resolve, reject) => {
     let games: GameArray = {};
+    //console.log(process.env);
     try {
       for (let url of SPACE_URLS) {
         const parser = url.split("?")[0].split("/");

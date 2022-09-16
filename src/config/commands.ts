@@ -4,6 +4,7 @@ import { ServerClientEventContext } from "@gathertown/gather-game-client/dist/sr
 interface CommandList {
   [command: string]: {
     description: string;
+    helptext?: string;
     public: boolean;
     fx: Function;
   };
@@ -25,10 +26,35 @@ export const commandList: CommandList = {
       Object.keys(commandList).forEach((key) => {
         if (commandList[key].public) {
           game.chat(context.playerId!, [], context.player!.map!, {
-            contents: `Command: /${key}\nDescription: ${commandList[key].description}\n`,
+            contents: `Command: /${key}\nDescription: ${commandList[key].description}\n--------`,
           });
         }
       });
+    },
+  },
+  help: {
+    description: "Chats to the user detailed instructions about a command.",
+    public: true,
+    helptext: "Enter /help [command] to get details about /[command].",
+    fx: async ({ game, context, parser }: CommandProps) => {
+      if (parser.length > 1 && commandList[parser[1]].public) {
+        game.chat(context.playerId!, [], context.player!.map!, {
+          contents: `Command: /${parser[1]}\nInstructions:\n${
+            commandList[parser[1]].helptext ??
+            commandList[parser[1]].description
+          }\n--------`,
+        });
+      } else if (parser.length === 1) {
+        game.chat(context.playerId!, [], context.player!.map!, {
+          contents: `Command: /${"help"}\nInstructions:\n${
+            commandList["help"].helptext
+          }\n--------`,
+        });
+      } else {
+        game.chat(context.playerId!, [], context.player!.map!, {
+          contents: `Sorry, no such command found.\n--------`,
+        });
+      }
     },
   },
 
@@ -49,7 +75,7 @@ export const commandList: CommandList = {
       ).json();
 
       game.chat(context.playerId!, [], context.player!.map!, {
-        contents: `🎲 Fun Fact: ${res.data.fact.toLowerCase()}`,
+        contents: `🎲 Fun Fact: ${res.data.fact.toLowerCase()}\n--------`,
       });
     },
   },
@@ -64,13 +90,15 @@ export const commandList: CommandList = {
       ).json();
 
       game.chat(context.playerId!, [], context.player!.map!, {
-        contents: `🐱 Secret Cat Fact: ${res.data[0].toLowerCase()}`,
+        contents: `🐱 Secret Cat Fact: ${res.data[0].toLowerCase()}\n--------`,
       });
     },
   },
 
   "go-kart": {
     description: "Provides a go-kart for the user on command.",
+    helptext:
+      "Gives you a go-kart! Your cart will fall off if you interact with something, and be cleaned up automatically.",
     public: true,
     fx: async ({ game, context }: CommandProps) => {
       game.setVehicleId(
